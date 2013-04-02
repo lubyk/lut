@@ -1,7 +1,8 @@
+{% mod = require 'lut' %}
 --- This file is part of Lubyk project
 
-name = "Lub"
-version = "{{lub.VERSION}}"
+name = "Lut"
+version = "{{mod.VERSION}}"
 
 desc = "Utility module for lubyk. Contains a documentation generator and testing facilities."
 author = "Gaspard Bucher"
@@ -11,5 +12,5 @@ maintainer = "Gaspard Bucher"
 
 depends = {
 	"lua ~> 5.1",
-  "luafilesystem >= 1.5.0",
+  "lub ~> 1.0",
 }
