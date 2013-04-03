@@ -5,7 +5,7 @@ cmake_minimum_required ( VERSION 2.8 )
 include ( cmake/dist.cmake )
 include ( lua )
 
-install(
+install (
   DIRECTORY lut/
   DESTINATION ${INSTALL_LMOD}/lut
   COMPONENT Runtime
