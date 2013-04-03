@@ -1,7 +1,7 @@
 package = "Lut"
 version = "1.0.0-1"
 source = {
-   url = "http://lubyk.org/archive/REL-1.0.0.tar.gz",
+   url = "http://lubyk.org/archive/lut-REL-1.0.0.tar.gz",
    dir = 'lut-REL-1.0.0',
 }
 description = {
