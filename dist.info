@@ -1,7 +1,7 @@
 --- This file is part of Lubyk project
 
 name = "lut"
-version = "1.0.0"
+version = "1.0.2"
 
 desc = "Utility module for lubyk. Contains a documentation generator and testing facilities."
 author = "Gaspard Bucher"
@@ -10,6 +10,6 @@ url = "http://lubyk.org"
 maintainer = "Gaspard Bucher"
 
 depends = {
-  "lua ~> 5.1",
+  "lua >= 5.1, < 5.3",
   "lub ~> 1.0",
 }

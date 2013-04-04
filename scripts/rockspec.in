@@ -1,41 +1,39 @@
 {% mod = require 'lut' %}
-package = "Lut"
+package = "{{mod.type}}"
 version = "{{mod.VERSION}}-1"
 source = {
-   url = "http://lubyk.org/archive/{{mod.type}}-REL-{{mod.VERSION}}.tar.gz",
-   dir = '{{mod.type}}-REL-{{mod.VERSION}}',
+  url = "http://lubyk.org/archive/{{mod.type}}-REL-{{mod.VERSION}}.tar.gz",
+  dir = '{{mod.type}}-REL-{{mod.VERSION}}',
 }
 description = {
-   summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
-   detailed = [[
-      lub.Doc: a powerful documentation generator for Lua code with support for
-      litterate programming, cross-reference linking, images, latex math, etc.
-      
-      lub.Test: unit testing framework.
-   ]],
-   --   lub.Test: A simple yet powerful unit testing framework.
-   homepage = "http://lubyk.org",
-   license = "MIT"
+  summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
+  detailed = [[
+    lub.Doc: a powerful documentation generator for Lua code with support for
+    litterate programming, cross-reference linking, images, latex math, etc.
+    
+    lub.Test: unit testing framework.
+  ]],
+  homepage = "http://lubyk.org",
+  license = "MIT"
 }
 dependencies = {
-   "lua ~> 5.1",
-   "lub ~> 1.0",
+  "lua >= 5.1, < 5.3",
+  "lub ~> 1.0",
 }
 build = {
   type = 'builtin',
   modules = {
+    {{string.format("[%-17s] = '%s/%s.lua'", "'"..mod.type.."'", mod.type, 'init')}},
 {% for file in lfs.dir(mod.type) do %}
-{% if file == 'init.lua' then %}
-    ['{{mod.type}}'         ] = '{{mod.type}}/init.lua',
-{% elseif file:match('.lua$') then file = file:sub(1, -5) %}
-    ['{{mod.type}}.{{file}}'] = '{{mod.type}}/{{file}}.lua',
+{% if file ~= 'init.lua' and file:match('.lua$') then file = file:sub(1, -5) %}
+    {{string.format("[%-17s] = '%s/%s.lua'", "'"..mod.type..'.'..file.."'", mod.type, file)}},
 {% end %}
 {% end %}
   },
   install = {
     lua = {
       ['lut.doc.template'] = 'lut/doc/template.html',
-{% for _, path in ipairs(lut.Doc.ASSETS) do %}
+{% for _, path in ipairs(mod.Doc.ASSETS) do %}
       ['lut.doc.{{path:gsub('[.]', '_'):gsub('/', '.')}}'] = 'lut/doc/{{path}}',
 {% end %}
     },

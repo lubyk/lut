@@ -11,6 +11,6 @@ url = "http://lubyk.org"
 maintainer = "Gaspard Bucher"
 
 depends = {
-  "lua ~> 5.1",
+  "lua >= 5.1, < 5.3",
   "lub ~> 1.0",
 }
