@@ -11,14 +11,15 @@ env:
   - TOOL="clang"                # Use clang
   - TOOL="i686-w64-mingw32"     # 32bit MinGW
   - TOOL="x86_64-w64-mingw32"   # 64bit MinGW
-  - TOOL="arm-linux-gnueabihf"  # ARM hard-float (hf), linux
+#  Always fails because lua does not build.
+#  - TOOL="arm-linux-gnueabihf"  # ARM hard-float (hf), linux
 
 # Crosscompile builds may fail
-matrix:
-  allow_failures:
-    - env: TOOL="i686-w64-mingw32"
-    - env: TOOL="x86_64-w64-mingw32"
-    - env: TOOL="arm-linux-gnueabihf"
+# matrix:
+#   allow_failures:
+#     - env: TOOL="i686-w64-mingw32"
+#     - env: TOOL="x86_64-w64-mingw32"
+#     - env: TOOL="arm-linux-gnueabihf"
 
 # Install dependencies
 install:
@@ -31,7 +32,7 @@ before_script:
 
 # Build the module
 script:
-  - ~/_tools/travis/travis build && ~/build/lubyk/lut/_test/bin/lua test/all.lua
+  - ~/_tools/travis/travis build && (test -e ~/build/lubyk/lut/_test/bin/lua.exe || ~/build/lubyk/lut/_test/bin/lua test/all.lua)
 
 # Execute additional tests or commands
 after_script:
