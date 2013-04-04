@@ -20,7 +20,8 @@ local current = nil
 --
 -- Full test file example:
 --
---   require 'lut'
+--   local lub    = require 'lub'
+--   local lut    = require 'lut'
 --   local should = lut.Test 'animal.Dog'
 --
 --   function should.bark()
@@ -178,7 +179,8 @@ end
 -- Test all files in `list_or_path` matching `pattern`. Typical usage is to
 -- create an `all.lua` file in the tests folder with:
 --
---   require 'lut'
+--   local lub = require 'lub'
+--   local lut = require 'lut'
 --   lut.Test.files(lub.path '|')
 --
 -- This will run tests for all files matching the default pattern `%_test.lua$`.

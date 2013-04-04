@@ -3,7 +3,8 @@
   lub.Doc test
 
 --]]------------------------------------------------------
-require 'lut'
+local lub    = require 'lub'
+local lut    = require 'lut'
 local should = lut.Test('lut.Test', { coverage = false })
 
 function should.assertTrue()

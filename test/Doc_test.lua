@@ -3,7 +3,8 @@
   lut.Doc test
 
 --]]------------------------------------------------------
-require 'lut'
+local lub    = require 'lub'
+local lut    = require 'lut'
 local should = lut.Test 'lut.Doc'
 
 local tmp   = lub.path '|fixtures/tmp'
