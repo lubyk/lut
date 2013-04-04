@@ -31,7 +31,7 @@ before_script:
 
 # Build the module
 script:
-  - ~/_tools/travis/travis build
+  - ~/_tools/travis/travis build && ~/build/lubyk/lut/_test/bin/lua test/all.lua
 
 # Execute additional tests or commands
 after_script:
@@ -45,7 +45,7 @@ branches:
 # Notify the LuaDist Dev group if needed
 notifications:
   recipients:
-    - luadist-dev@googlegroups.com
+    - gaspard@teti.ch
   email:
     on_success: change
     on_failure: always
