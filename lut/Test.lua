@@ -611,6 +611,8 @@ function private.report()
     end
   end
   print('')
+
+  os.exit(lib.total_fail == 0 and 0 or -1)
 end
 
 return lib
