@@ -3,10 +3,10 @@
 name = "lut"
 version = "1.0.2"
 
-desc = "Utility module for lubyk. Contains a documentation generator and testing facilities."
+desc = "Utility module for lubyk (non-runtime). Contains a documentation generator and testing facilities."
 author = "Gaspard Bucher"
 license = "MIT"
-url = "http://lubyk.org"
+url = "http://doc.lubyk.org/lut.html"
 maintainer = "Gaspard Bucher"
 
 depends = {

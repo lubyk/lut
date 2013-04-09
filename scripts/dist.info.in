@@ -4,7 +4,7 @@
 name = "{{mod.type}}"
 version = "{{mod.VERSION}}"
 
-desc = "Utility module for lubyk. Contains a documentation generator, templating system and testing facilities."
+desc = "Utility module for lubyk (non-runtime). Contains a documentation generator and testing facilities."
 author = "Gaspard Bucher"
 license = "MIT"
 url = "http://doc.lubyk.org/{{mod.type}}.html"
