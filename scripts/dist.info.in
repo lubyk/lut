@@ -4,10 +4,10 @@
 name = "{{mod.type}}"
 version = "{{mod.VERSION}}"
 
-desc = "Utility module for lubyk. Contains a documentation generator and testing facilities."
+desc = "Utility module for lubyk. Contains a documentation generator, templating system and testing facilities."
 author = "Gaspard Bucher"
 license = "MIT"
-url = "http://lubyk.org"
+url = "http://doc.lubyk.org/{{mod.type}}.html"
 maintainer = "Gaspard Bucher"
 
 depends = {

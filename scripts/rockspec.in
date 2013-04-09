@@ -13,7 +13,7 @@ description = {
     
     lub.Test: unit testing framework.
   ]],
-  homepage = "http://lubyk.org",
+  homepage = "http://doc.lubyk.org/{{mod.type}}.html",
   license = "MIT"
 }
 dependencies = {
