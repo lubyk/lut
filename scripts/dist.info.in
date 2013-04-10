@@ -1,4 +1,3 @@
-{% mod = require 'lut' %}
 --- This file is part of Lubyk project
 
 name = "{{mod.type}}"

@@ -1,4 +1,3 @@
-{% mod = require 'lut' %}
 package = "{{mod.type}}"
 version = "{{mod.VERSION}}-1"
 source = {

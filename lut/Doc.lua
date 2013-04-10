@@ -1092,6 +1092,7 @@ parser.mmath = {
   -- Inline
   { match  = '^ *%[math%](.*)%[/math%]', 
     output = function(self, i, d)
+      if d == '' then return end
       private.flushPara(self)
       self.para = {math = 'inline', text = d}
       private.flushPara(self)
@@ -1685,6 +1686,7 @@ local function osTry(cmd)
 end
 
 function private:mathjaxTag(para)
+  if match(para.text, '^ *$') then return '' end
   if para.math == 'inline' then
     return '\\('..para.text..'\\)'
   else

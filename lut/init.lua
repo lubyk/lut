@@ -13,8 +13,7 @@
 local lub = require 'lub'
 local lib = lub.Autoload 'lut'
 
--- Current version for 'lut' module. Odd minor version numbers are never
--- released and are used during development.
-lib.VERSION = '1.0.2'
+-- Current version of 'lut' respecting [semantic versioning](http://semver.org).
+lib.VERSION = '1.0.3'
 
 return lib

@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
+package.path = './?/init.lua;./?.lua;'..package.path
 lub = require 'lub'
-local mod = require 'lut'
+mod = require 'lut'
 
 local tmp = lub.Template(lub.content(lub.path '|rockspec.in'))
 lub.writeall(mod.type..'-'..mod.VERSION..'-1.rockspec', tmp:run())

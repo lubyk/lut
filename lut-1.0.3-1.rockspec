@@ -1,8 +1,8 @@
 package = "lut"
-version = "1.0.2-1"
+version = "1.0.3-1"
 source = {
-  url = "http://lubyk.org/archive/lut-REL-1.0.2.tar.gz",
-  dir = 'lut-REL-1.0.2',
+  url = "http://lubyk.org/archive/lut-REL-1.0.3.tar.gz",
+  dir = 'lut-REL-1.0.3',
 }
 description = {
   summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
@@ -12,7 +12,7 @@ description = {
     
     lub.Test: unit testing framework.
   ]],
-  homepage = "http://lubyk.org",
+  homepage = "http://doc.lubyk.org/lut.html",
   license = "MIT"
 }
 dependencies = {
