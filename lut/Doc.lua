@@ -210,7 +210,17 @@ local ATTRIBS = { -- doc
     printf("Result = %.2f\n", x);
 
   As you can see, you have to declare other languages with `#name` if the code
-  is not Lua.
+  is not Lua. When using `#txt`, the code is not styled with prettyprint. The
+  code lang can also contain multiple words. The first word is the language and
+  the following are used for CSS class styling.
+
+  Special ascii art code:
+
+    #txt ascii
+    +--------+
+    | a box  |
+    +--------+
+
 
   # Styles
 
@@ -1022,7 +1032,7 @@ parser.mcode = {
   -- first line
   { match  = '^    (.*)$',
     output = function(self, i, d)
-      local lang = match(d, '#([^ ]+)')
+      local lang = match(d, '#(.+)')
       if lang then
         d = nil
       else
@@ -1358,7 +1368,11 @@ parser.lua = {
   },
   -- todo, fixme, warn
   { match = '^ *(%-%- *([A-Z][A-Z][A-Z][A-Z]+):? ?(.*))$',
-    output = private.todoFixme,
+    -- This does not support multiline todo.
+    output = function(self, ...)
+      private.todoFixme(self, ...)
+      private.flushPara(self)
+    end
   },
   { match  = '^ *%-%- +(.+)$',
     move = function(self)
