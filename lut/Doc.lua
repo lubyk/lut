@@ -79,6 +79,9 @@
     -- Out of file function definition (in C++ for example).
     -- function lib:connect(server)
 
+    -- Out of file constant definition
+    -- lib.Default
+
   To ignore functions, use `-- nodoc` as documentation:
 
     -- nodoc
@@ -227,7 +230,7 @@ local ATTRIBS = { -- doc
   You can enhance your comments with links, bold, italics and images.
 
   Some links are automatically created when the parser sees `module.Class` like
-  this: lut.Doc. A custom link is made with `[link title](http://example.com)`.
+  this lut.Doc or `#Some-local-id`. A custom link is made with `[link title](http://example.com)`.
 
   Bold is done by using stars: `some text with *bold* emphasis`. Italics are
   inserted with underscores: `some text _with italic_ emphasis`.
@@ -815,6 +818,21 @@ function private:newFunction(i, typ, fun, params)
   self.in_func = self.group
 end
 
+function private:newConstant(i, const)
+  local i = #self.group
+  if self.group[i] and self.group[i].text == 'nodoc' then
+    -- ignore last para
+    table.remove(self.group)
+    self.para = nil
+    return
+  end
+
+  -- Store last group as function definition
+  self.group.const = const
+  private.useGroup(self)
+  self.in_func = self.group
+end
+
 function private:newParam(i, key, params, typ)
   typ = typ or 'param'
   local i = #self.group
@@ -991,6 +1009,10 @@ parser.mgroup = {
   -- out of file function
   { match  = '^ *function lib([:%.])([^%(]+)(.*)$',
     output = private.newFunction,
+  },
+  -- out of file constant
+  { match  = '^ *lib%.(.*)$',
+    output = private.newConstant,
   },
   -- todo, fixme, warn
   { match = '^ *(([A-Z][A-Z][A-Z][A-Z]+):? ?(.*))$',
@@ -1190,6 +1212,10 @@ parser.group = {
   -- out of file function definition
   { match  = '^ *%-%- *function lib([:%.])([^%(]+)(.*)$',
     output = private.newFunction,
+  },
+  -- out of file constant
+  { match  = '^ *%-%- *lib%.(.*)$',
+    output = private.newConstant,
   },
   -- math section
   { match = '^ *%-%- *%[math%]',
@@ -1633,8 +1659,8 @@ function private:textToHtml(text)
   end)
   p = private.autoLink(p, codes)
   -- section link #Make or method link #foo
-  p = gsub(p, ' #([A-Za-z]+[A-Za-z_]+)', function(name)
-    table.insert(codes, string.format(" <a href='#%s'>%s</a>", name, name))
+  p = gsub(p, ' #([A-Za-z]+[A-Za-z_-]+)', function(name)
+    table.insert(codes, string.format(" <a href='#%s'>%s</a>", name, name:gsub('-', ' ')))
     return CODE..#codes
   end)
 

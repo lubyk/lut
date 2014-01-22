@@ -135,6 +135,9 @@ end
 -- With a second paragraph to describe the out of file function.
 -- function lib:outOfFile(one, two)
 
+-- And here is an out of file constant
+-- lib.Default
+
 
 --[[
   # Multi line comment

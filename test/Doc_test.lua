@@ -62,6 +62,11 @@ function should.extractDescription()
   }, description)
 end
 
+function should.extractOutOfFileParam()
+  local doc = lut.Doc(tpath)
+  assertMatch("<h4 id='Default' class='entry const'>Default</h4>", doc:toHtml())
+end                                
+
 function should.convertToHtml()
   local doc = lut.Doc(tpath)
   assertMatch('<title>Documentation Tester</title>', doc:toHtml())
