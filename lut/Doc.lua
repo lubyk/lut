@@ -253,6 +253,11 @@ local ATTRIBS = { -- doc
   
     -- This is `inline code`.
 
+
+  You can also insert raw html with `<html>` tag.
+
+    <html><a href='example.com'>hello</a></html>
+
   # Lists
 
   There are two kinds of lists available. The first one is simply a bullet list:
@@ -321,7 +326,7 @@ local parser  = {}
 local CODE = '§§'
 local ALLOWED_OPTIONS = {lit = true, loose = true}
 local DEFAULT_HEADER = [[ ]]
-local DEFAULT_FOOTER = [[ made with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
+local DEFAULT_FOOTER = [[ Documentation on {{os.date '%Y-%m-%d'}} with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
 local gsub  = string.gsub
 local match = string.match
 
@@ -356,8 +361,8 @@ lib.ASSETS =  {
 -- + head       : HTML content to insert in `<head>` tag.
 -- + index_head : HTML content to insert in `<head>` tag of index file.
 -- + css        : Path to a CSS file to use instead of `css/docs.css`.
--- + header     : HTML code to display in header.
--- + footer     : HTML code to display in footer.
+-- + header     : HTML code to display in header (lub.Template evaluated).
+-- + footer     : HTML code to display in footer (lub.Template evaluated).
 -- + target     : Target directory (only used when using PNG image generation
 --                for math code.
 function lib.new(path, def)
@@ -604,11 +609,10 @@ function private.makeDoc(tree, def)
       -- Children navigation (listed in main div)
       children   = elem,
       target     = def.target,
-      header     = def.header,
-      footer     = def.footer or DEFAULT_FOOTER,
       toplevel   = tree.is_root,
       opts       = def,
     })
+    
     elem.__title   = doc.sections[1].title
     elem.__summary = doc.sections[1][1][1]
     local img = doc.sections[1][1][2]
@@ -618,6 +622,10 @@ function private.makeDoc(tree, def)
     elem.__todo    = doc.todo
     elem.__fixme   = doc.fixme
     local trg = def.target .. '/' .. doc.fullname .. '.' .. def.format
+
+    doc.header = lub.Template(def.header):run {self = elem}
+    doc.footer = lub.Template(def.footer or DEFAULT_FOOTER):run {self = elem}
+
     lub.writeall(trg, private.output[def.format](doc, def.template))
   end
 
@@ -642,11 +650,13 @@ function private.makeDoc(tree, def)
       -- Children navigation (listed in main div)
       children   = tree,
       target     = def.target,
-      header     = def.header,
-      footer     = def.footer or DEFAULT_FOOTER,
       toplevel   = false,
       opts       = def,
     })
+
+    doc.header = lub.Template(def.header):run {self = tree}
+    doc.footer = lub.Template(def.footer or DEFAULT_FOOTER):run {self = tree}
+    
     local trg = def.target .. '/index.' .. def.format
     lub.writeall(trg, private.output[def.format](doc, def.template))
   end
@@ -1627,6 +1637,8 @@ function private:paraToHtml(para)
     -- render list
     return private.listToHtml(self, para)
   else
+    local raw = match(text, '^ *<html>(.-)</html>')
+    if raw then return raw end
     return "<p>"..private.textToHtml(self, text).."</p>"
   end
 end
