@@ -107,7 +107,7 @@ function should.parseCode()
   Summary
 --]]--
 
-p { -- doc
+lib.p = { -- doc
 
   -- Foo bar baz
   f = 5,
@@ -118,6 +118,7 @@ p { -- doc
 
     ]=],
   })
+
   assertValueEqual({
     p = {
       f = {
@@ -125,10 +126,18 @@ p { -- doc
         tparam = 'f',
         {text = 'Foo bar baz'},
       },
+      ['"Hello"'] = {
+        lparam = '"Hello"',
+        {text = 'List element'},
+      },
       {
         params = '5',
         tparam = 'f',
         {text = 'Foo bar baz'},
+      },
+      {
+        lparam = '"Hello"',
+        {text = 'List element'},
       },
     },
   }, doc.params)

@@ -11,13 +11,15 @@ description = {
     litterate programming, cross-reference linking, images, latex math, etc.
     
     lub.Test: unit testing framework.
+
+    Read the documentation at http://doc.lubyk.org/lut.html. 
   ]],
   homepage = "http://doc.lubyk.org/lut.html",
   license = "MIT"
 }
 dependencies = {
   "lua >= 5.1, < 5.3",
-  "lub ~> 1.0",
+  "lub >= 1.0.3, < 1.1",
 }
 build = {
   type = 'builtin',
