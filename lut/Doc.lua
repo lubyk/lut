@@ -623,7 +623,7 @@ function private.makeDoc(tree, def)
     elem.__fixme   = doc.fixme
     local trg = def.target .. '/' .. doc.fullname .. '.' .. def.format
 
-    doc.header = lub.Template(def.header):run {self = elem}
+    doc.header = def.header and lub.Template(def.header):run {self = elem}
     doc.footer = lub.Template(def.footer or DEFAULT_FOOTER):run {self = elem}
 
     lub.writeall(trg, private.output[def.format](doc, def.template))
@@ -654,7 +654,7 @@ function private.makeDoc(tree, def)
       opts       = def,
     })
 
-    doc.header = lub.Template(def.header):run {self = tree}
+    doc.header = def.header and lub.Template(def.header):run {self = tree}
     doc.footer = lub.Template(def.footer or DEFAULT_FOOTER):run {self = tree}
     
     local trg = def.target .. '/index.' .. def.format
