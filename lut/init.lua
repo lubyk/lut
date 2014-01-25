@@ -1,5 +1,5 @@
 --[[--------------------
-  # Lubyk utility module
+  # Lubyk utility module <a href="https://travis-ci.org/lubyk/lut"><img src="https://travis-ci.org/lubyk/lut.png" alt="Build Status"></a> 
 
   Currently, this module contains a documentation generator and
   testing facilities.
