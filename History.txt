@@ -1,0 +1,13 @@
+== 1.0.3
+
+  * Enable const declaration.
+  * Enable table list element documentation.
+  * Simplified CSS a little to ease reading table attributes.
+
+== 1.0.2 2013-04-04
+
+  * Rockspec and luadist fixes.
+
+== 1.0.0 2013-04-03
+  
+  * Initial release.

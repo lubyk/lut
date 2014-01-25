@@ -60,8 +60,12 @@
           <h4 id='{{group.global_fun}}' class='entry function'>{{group.global_fun}} <code>{{group.params}}</code></h4>
           {% elseif group.tparam then %}
           <h4 id='{{group.tparam}}' class='entry tparam'>{{group.tparam}} <code>= {{group.params}}</code></h4>
+          {% elseif group.lparam then %}
+          <h4 id='{{group.tparam}}' class='entry lparam'><code>{{group.lparam}}</code></h4>
           {% elseif group.const then %}
           <h4 id='{{group.const}}' class='entry const'>{{group.const}}</h4>
+          {% elseif group.param  == '' then %}
+          <h4 id='{{group.param}}' class='entry param'><code>{{group.params}}</code></h4>
           {% elseif group.param then %}
           <h4 id='{{group.param}}' class='entry param'><span>.</span>{{group.param}} <code>= {{group.params}}</code></h4>
           {% end %}

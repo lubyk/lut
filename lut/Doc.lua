@@ -119,6 +119,12 @@
       -- Some text for this group of attributes.
 
       phone = {default = '', format = '000 000 00 00'},
+
+      -- Documentation of element in list
+      'lua ~> 5.1',
+
+      -- Other element
+      'lub ~> 1.0',
     }
 
   Such a list will create the following documentation:
@@ -139,6 +145,12 @@ local ATTRIBS = { -- doc
   -- Some text for this group of attributes.
 
   phone = {default = '', format = '000 000 00 00'},
+
+  -- Documentation of element in list
+  'lua ~> 5.1',
+
+  -- Other element
+  'lub ~> 1.0',
 }
 
 --[[
@@ -225,7 +237,7 @@ local ATTRIBS = { -- doc
     +--------+
 
 
-  # Styles
+  # Styles, links
 
   You can enhance your comments with links, bold, italics and images.
 
@@ -851,6 +863,9 @@ function private:newParam(i, key, params, typ)
     -- This is to have creation order
     table.insert(self.curr_param, self.group)
     self.curr_param[key] = self.group
+  elseif typ == 'lparam' then
+    table.insert(self.curr_param, self.group)
+    self.curr_param[key] = self.group
   else
     table.insert(self.params, self.group)
     self.params[key] = self.group
@@ -858,6 +873,16 @@ function private:newParam(i, key, params, typ)
 
   private.useGroup(self)
   self.group = {}
+end
+
+function private:newAttrib(i, title, prefix)
+  local code = code or '= {'
+  private.flushPara(self)
+  table.insert(self.group, {
+    -- Documenting an attribute
+    attr = title, prefix = prefix
+  })
+  private.useGroup(self)
 end
 
 function private:newTitle(i, title, typ)
@@ -1269,7 +1294,7 @@ parser.end_comment = {
         -- Special case where a lib attribute itself is documented
         self.curr_param = {}
         self.params[key] = self.curr_param
-        private.newTitle(self, i, '.'..key .. ' = ')
+        private.newAttrib(self, i, key, '.')
         self.force_move = parser.params
       else
         if self.group[1] and self.group[1].heading then
@@ -1345,7 +1370,7 @@ parser.lua = {
           -- Special case where a lib attribute itself is documented
           self.curr_param = {}
           self.params[key] = self.curr_param
-          private.newTitle(self, i, '.'..key .. ' = {')
+          private.newAttrib(self, i, key, '.')
           self.force_move = parser.params
         else
           if not self.loose then
@@ -1381,14 +1406,14 @@ parser.lua = {
     end,
   },
   -- params
-  { match  = '^ *(.-) *{ %-%- *doc *$',
+  { match  = '^ *(.-) *= *{ %-%- *doc *$',
     output = function(self, i, key)
       self.curr_param = {}
       self.params[key] = self.curr_param
       -- remove 'local' prefix
       local k = match(key, '^local *(.+)$')
       key = k or key
-      private.newTitle(self, i, key .. ' {')
+      private.newAttrib(self, i, key)
     end,
     move = function() return parser.params end,
   },
@@ -1459,10 +1484,16 @@ parser.params = {
       private.newParam(self, i, key, d, 'tparam')
     end,
   },
+  -- list entry
+  { match  = '^ *(.*), *$',
+    output = function(self, i, value)
+      private.newParam(self, i, value, nil, 'lparam')
+    end,
+  },
   -- end of params definition
   { match = '^}',
     output = function(self, i)
-      private.newTitle(self, i, '}', 'end')
+      private.newAttrib(self, i, '}')
       private.useGroup(self)
     end,
     move = function(self)
@@ -1565,6 +1596,15 @@ function private:paraToHtml(para)
   local text = para.text or ''
   if para.class then
     return "<p class='"..para.class.."'>"..private.textToHtml(self, text).."</p>"
+  elseif para.attr then
+    -- Starting attribute documentation
+    if para.attr == '}' then
+      -- end of definition
+      return "<h4 class='entry attrib'>}</h4>"
+    else
+      local prefix = para.prefix and '<span>.</span>' or ''
+      return "<h4 id='"..para.attr.."' class='entry param'>"..prefix..private.textToHtml(self, para.attr)..' = {</h4>'
+    end
   elseif para.heading then
     return "<h4 class='sub-"..para.heading.."'>"..private.textToHtml(self, text).."</h4>"
   elseif para.math then

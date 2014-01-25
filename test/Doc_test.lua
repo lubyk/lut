@@ -111,6 +111,9 @@ p { -- doc
 
   -- Foo bar baz
   f = 5,
+
+  -- List element
+  "Hello",
 }
 
     ]=],
