@@ -326,7 +326,7 @@ local parser  = {}
 local CODE = '§§'
 local ALLOWED_OPTIONS = {lit = true, loose = true}
 local DEFAULT_HEADER = [[ ]]
-local DEFAULT_FOOTER = [[ Documentation on {{os.date '%Y-%m-%d'}} with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
+local DEFAULT_FOOTER = [[ Documentation generated on {{os.date '%Y-%m-%d'}} with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
 local gsub  = string.gsub
 local match = string.match
 
