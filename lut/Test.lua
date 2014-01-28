@@ -91,6 +91,10 @@ function lib:testWithUser()
 end
 
 -- # Global settings
+-- Set these before running tests:
+--
+--   lut.Test.verbose = true
+--   lut.Test.files(lub.path '|')
 
 -- nodoc
 lib.suites = {}
