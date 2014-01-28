@@ -10,6 +10,13 @@ local lub     = require 'lub'
 local lib     = lub.class 'lut.Test'
 local private = {}
 
+local ipairs, pairs, print, match,        format,        find,        tostring = 
+      ipairs, pairs, print, string.match, string.format, string.find, tostring
+
+local function printf(...)
+  print(format(...))
+end
+
 -- Currently running test.
 local current = nil
 
@@ -209,7 +216,7 @@ function lib.files(list_or_path, pattern, reject)
   local list = {}
   for _, path in ipairs(sources) do
     for file in lub.Dir(path):glob(pattern) do
-      if reject and string.match(file, reject) then
+      if reject and match(file, reject) then
         -- skip
       else
         table.insert(list, file)
@@ -255,13 +262,13 @@ end
 
 -- Assert that `val` is false.
 function assertFalse(val)
-  assert(not val, string.format('Should fail but passed.'))
+  assert(not val, format('Should fail but passed.'))
 end
 
 -- Assert that `ok` is true. If `msg` exists, it is used in case of failure
 -- in place of the default fail message.
 function assertTrue(ok, msg)
-  assert(ok, msg or string.format('True expected but was false.'))
+  assert(ok, msg or format('True expected but was false.'))
 end
 
 -- Assert that `value` is equal to `expected`. If `expected` is a number,
@@ -276,9 +283,9 @@ function assertEqual(expected, value, resolution, up_count)
   up_count = up_count or 1
   if resolution and type(expected) == 'number' and type(value) == 'number' then
     local ok = (value >= expected - resolution) and (value <= expected + resolution)
-    assert(ok, string.format('Expected %s but found %s (resolution: %f).', formatArg(expected), formatArg(value), resolution), up_count + 1)
+    assert(ok, format('Expected %s but found %s (resolution: %f).', formatArg(expected), formatArg(value), resolution), up_count + 1)
   else
-    assert(value == expected, string.format('Expected %s but found %s.', formatArg(expected), formatArg(value)), up_count + 1)
+    assert(value == expected, format('Expected %s but found %s.', formatArg(expected), formatArg(value)), up_count + 1)
   end
 end
 
@@ -301,7 +308,7 @@ function assertTableEqual(expected, value, resolution, up_count)
   end
   for k, v in pairs(value) do
     if expected[k] == nil then
-      assert(false, string.format("Expected no '%s' key but found %s.", k, formatArg(v)), up_count + 1)
+      assert(false, format("Expected no '%s' key but found %s.", k, formatArg(v)), up_count + 1)
     end
     assertValueEqual(v, value[k], resolution, up_count + 1)
   end
@@ -310,27 +317,27 @@ end
 
 -- Asserts that `value` is not equal to `unexpected`.
 function assertNotEqual(unexpected, value)
-  assert(value ~= unexpected, string.format('Should not equal %s.', formatArg(unexpected)))
+  assert(value ~= unexpected, format('Should not equal %s.', formatArg(unexpected)))
 end
 
 -- Assert that `value` matches `pattern` using `string.match`.
 function assertMatch(pattern, value)
-  assert(type(value) == 'string', string.format('Should be a string but was a %s.', type(value)))
-  assert(string.find(value, pattern), string.format('Expected to match %s but was %s.', formatArg(pattern), formatArg(value)))
+  assert(type(value) == 'string', format('Should be a string but was a %s.', type(value)))
+  assert(find(value, pattern), format('Expected to match %s but was %s.', formatArg(pattern), formatArg(value)))
 end
 
 -- Assert that `value` does not match `pattern`. If `msg` is provided, use this
 -- in case of failure.
 function assertNotMatch(pattern, value, msg)
-  assert(type(value) == 'string', string.format('Should be a string but was a %s.', type(value)))
-  assert(not string.find(value, pattern), string.format('Expected to not match %s but was %s.', formatArg(pattern), formatArg(value)))
+  assert(type(value) == 'string', format('Should be a string but was a %s.', type(value)))
+  assert(not find(value, pattern), format('Expected to not match %s but was %s.', formatArg(pattern), formatArg(value)))
 end
 
 -- Assert that calling `func` generates an error message that matches `pattern`.
 function assertError(pattern, func)
   local ok, err = pcall(func)
-  assert(not ok, string.format('Should raise an error but none found.'))
-  assert(string.find(err, pattern), string.format('Error expected to match %s but was %s.', formatArg(pattern), formatArg(err)))
+  assert(not ok, format('Should raise an error but none found.'))
+  assert(find(err, pattern), format('Error expected to match %s but was %s.', formatArg(pattern), formatArg(err)))
 end
 
 -- Assert that calling `func` passes without errors. The optional `teardown` 
@@ -350,23 +357,23 @@ end
 
 -- Assert that `value` is less then `expected`.
 function assertLessThen(expected, value)
-  assert(value < expected, string.format('Should be less then %f but was %f.', expected, value))
+  assert(value < expected, format('Should be less then %f but was %f.', expected, value))
 end
 
 -- Assert that the Lua type of `value` is `expected` ('number', 'table',
 -- 'function', etc).
 function assertType(expected, value)
-  assert(type(value) == expected, string.format('Should be a %s but was %s.', expected, type(value)))
+  assert(type(value) == expected, format('Should be a %s but was %s.', expected, type(value)))
 end
 
 -- Assert that `value` is nil.
 function assertNil(value)
-  assert(type(value) == 'nil', string.format('Should be nil but was %s.', type(value)))
+  assert(type(value) == 'nil', format('Should be nil but was %s.', type(value)))
 end
 
 -- Assert that `value` is in the range defined by [`t1`, `t2`[.
 function assertInRange(t1, t2, value)
-  assert(value >= t1 and value < t2, string.format('Should be in [%f, %f[ but was %f.', t1, t2, value))
+  assert(value >= t1 and value < t2, format('Should be in [%f, %f[ but was %f.', t1, t2, value))
 end
 
 -- Execute `func` every 0.3 s for `timeout` seconds or until the callback
@@ -427,7 +434,7 @@ function private:runSuite()
         if not meta then break end
       end
     end
-    _G.assert(meta, string.format("Testing coverage but '%s' metatable not found.", self._info.name))
+    _G.assert(meta, format("Testing coverage but '%s' metatable not found.", self._info.name))
 
     local coverage = {}
     self._info.coverage_ = coverage
@@ -469,7 +476,7 @@ function private:runSuite()
       else
         list = lub.join(not_tested, ', ')
       end
-      assertTrue(all_ok, string.format("Missing tests for %s", list))
+      assertTrue(all_ok, format("Missing tests for %s", list))
     end
   end
 
@@ -537,17 +544,17 @@ function private:reportSuite()
   if self._info.fail_count == 0 then
     ok_message = 'OK'
   else
-    ok_message = string.format('%i Failure(s)', self._info.fail_count)
+    ok_message = format('%i Failure(s)', self._info.fail_count)
   end
   local exec_count = self._info.exec_count
   if self._info.skip_count > 0 then
     if exec_count == 0 then
       ok_message = '-- skip'
     else
-      skip_message = string.format(' : skipped %i', self._info.skip_count)
+      skip_message = format(' : skipped %i', self._info.skip_count)
     end
   end
-  print(string.format('==== %-28s (%2i test%s%s): %s', self._info.name, exec_count, exec_count > 1 and 's' or ' ', skip_message, ok_message))
+  printf('==== %-28s (%2i test%s%s): %s', self._info.name, exec_count, exec_count > 1 and 's' or ' ', skip_message, ok_message)
   lib.total_exec = lib.total_exec + self._info.exec_count
   lib.total_count = lib.total_count + self._info.total_count
   lib.total_asrt = lib.total_asrt + self._info.assert_count
@@ -556,7 +563,7 @@ function private:reportSuite()
       local i, name, err = unpack(e)
       lib.total_fail = lib.total_fail + 1
       local hname = string.gsub(name, '([A-Z])', function(x) return ' '..string.lower(x) end)
-      print(string.format('  %i. Should %s\n     %s\n', i, hname, string.gsub(err, '\n', '\n     ')))
+      printf('  %i. Should %s\n     %s\n', i, hname, string.gsub(err, '\n', '\n     '))
     end
   end
 end
@@ -567,7 +574,7 @@ function private.parseArgs()
     if val == '--verbose' then
       lib.verbose = true
     else
-      local key,value = string.match(val, '%-%-(.-)=(.*)')
+      local key,value = match(val, '%-%-(.-)=(.*)')
       if key == 'only' then
         lib.only = value
       end
@@ -598,26 +605,26 @@ function private.report()
   end
 
   if lib.total_exec == 0 then
-    print(string.format('No tests defined. Test files must end with "_test.lua"'))
+    print('No tests defined. Test files must end with "_test.lua"')
   elseif lib.abort then
-    print(string.format('Abort after %i / %i tests', lib.total_exec, lib.total_count))
+    printf('Abort after %i / %i tests', lib.total_exec, lib.total_count)
   elseif lib.total_fail == 0 then
     if lib.total_exec == 1 then
-      print(string.format('Success! %i test passes (%i assertions).', lib.total_exec, lib.total_asrt))
+      printf('Success! %i test passes (%i assertions).', lib.total_exec, lib.total_asrt)
     else
-      print(string.format('Success! %i tests pass (%i assertions).', lib.total_exec, lib.total_asrt))
+      printf('Success! %i tests pass (%i assertions).', lib.total_exec, lib.total_asrt)
     end
   elseif lib.total_exec == 1 then
     if lib.total_fail == 1 then
-      print(string.format('Fail... %i failure / %i test', lib.total_fail, lib.total_exec))
+      printf('Fail... %i failure / %i test', lib.total_fail, lib.total_exec)
     else
-      print(string.format('Fail... %i failures / %i test', lib.total_fail, lib.total_exec))
+      printf('Fail... %i failures / %i test', lib.total_fail, lib.total_exec)
     end
   else
     if lib.total_fail == 1 then
-      print(string.format('Fail... %i failure / %i tests', lib.total_fail, lib.total_exec))
+      printf('Fail... %i failure / %i tests', lib.total_fail, lib.total_exec)
     else
-      print(string.format('Fail... %i failures / %i tests', lib.total_fail, lib.total_exec))
+      printf('Fail... %i failures / %i tests', lib.total_fail, lib.total_exec)
     end
   end
   print('')

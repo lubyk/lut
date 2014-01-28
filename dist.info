@@ -1,7 +1,7 @@
 --- This file is part of Lubyk project
 
 name = "lut"
-version = "1.0.3"
+version = "1.0.4"
 
 desc = "Utility module for lubyk (non-runtime). Contains a documentation generator and testing facilities."
 author = "Gaspard Bucher"

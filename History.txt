@@ -1,3 +1,8 @@
+== 1.0.4
+
+  * Fixed tests running when verbose is on.
+  * Small changes to documentation.
+
 == 1.0.3 2014-01-26
 
   * Enable const declaration.

@@ -1,8 +1,8 @@
 package = "lut"
-version = "1.0.3-1"
+version = "1.0.4-1"
 source = {
-  url = 'https://github.com/lubyk/lut/archive/REL-1.0.3.tar.gz',
-  dir = 'lut-REL-1.0.3',
+  url = 'https://github.com/lubyk/lut/archive/REL-1.0.4.tar.gz',
+  dir = 'lut-REL-1.0.4',
 }
 description = {
   summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
