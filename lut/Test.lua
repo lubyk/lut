@@ -97,11 +97,22 @@ function lib:testWithUser()
   return obj
 end
 
+-- # Command line arguments
+--
+-- When running tests from the command line, arguments are parsed by lut.Test
+-- for `--verbose` flag and `--only=someTestName`.
+--
+-- Example:
+--
+--   #bash
+--   > lua test/all.lua --only=someTest --verbose
+--
 -- # Global settings
 -- Set these before running tests:
 --
 --   lut.Test.verbose = true
 --   lut.Test.files(lub.path '|')
+--
 
 -- nodoc
 lib.suites = {}

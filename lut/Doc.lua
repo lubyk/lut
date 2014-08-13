@@ -3,6 +3,7 @@
   # Documentation extractor
 
   lut.Doc parses lua comments and extracts the documentation from these comments.
+  For usage, see lut.Doc.new.
 
   It parses indifferently multiline comments like this:
   
@@ -331,6 +332,7 @@ local gsub  = string.gsub
 local match = string.match
 
 -- nodoc
+-- list of files to copy in generated documentation.
 lib.ASSETS =  {
   'css/bootstrap.min.css',
   'css/docs.css',
@@ -467,6 +469,8 @@ end
 --            with a `prepend` key used to change the location of the files
 --            in the documentation.
 -- + copy:    lists the path to glob for static content to copy in `target`.
+--            Optionally, use `prepend` to copy in sub-directory and `filter`
+--            to select files.
 -- + header:  html code that will be inserted in every html page as header.
 -- + footer:  html code that will be inserted in every html page as footer.
 --
@@ -477,8 +481,9 @@ end
 --     sources = {
 --       'lib/doc/DocTest.lua',
 --       'lib/doc/Other.lua',
---       {'doc', prepend = 'tutorial/foo'},
+--       {'doc', prepend = 'examples/foo'},
 --     },
+--     copy = { 'doc', prepend = 'examples/lens', filter = '%.lua' },
 --     target = 'doc',
 --     format = 'html',
 --     header = [[
@@ -1536,7 +1541,7 @@ private.copyAssets = {}
 
 function private.getTemplate(format)
   local filename = 'template.'..format
-  return lub.content(lub.path('|doc/'..filename))
+  return lub.content(lub.path('|assets/doc/'..filename))
 end
 
 --=============================================== HTML TEMPLATE
@@ -1574,9 +1579,12 @@ function private.mod_output.html(module, def, modules)
 end
 
 function private.copyFiles(list, target)
+  if list.prepend then
+    target = target .. '/' .. list.prepend
+  end
   for _, mpath in ipairs(list) do
     local len = string.len(mpath)
-    for src in lub.Dir(mpath):glob() do
+    for src in lub.Dir(mpath):glob(list.filter) do
       local path = string.sub(src, len + 2)
       local trg  = target .. '/' .. path
       lub.copy(src, trg)
@@ -1585,7 +1593,7 @@ function private.copyFiles(list, target)
 end
 
 function private.copyAssets.html(target)
-  local src_base = lub.path '|'
+  local src_base = lub.path '|assets'
   for _, path in ipairs(lib.ASSETS) do
     local src = src_base .. '/doc/' .. path
     local trg = target .. '/' .. path

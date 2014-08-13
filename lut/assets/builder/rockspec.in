@@ -1,0 +1,106 @@
+{% 
+local lfs = require 'lfs'
+local lub = require 'lub'
+%}
+package = "{{type}}"
+version = "{{VERSION}}-1"
+source = {
+{% if BUILD.url then %}
+  url = '{{BUILD.url}}',
+  dir = '{{BUILD.dir}}',
+{% else %}
+  url = 'https://github.com/{{BUILD.github}}/{{type}}/archive/REL-{{VERSION}}.tar.gz',
+  dir = '{{type}}-REL-{{VERSION}}',
+{% end %}
+}
+description = {
+  summary = "{{DESCRIPTION.summary}}",
+  detailed = [[
+{{DESCRIPTION.detailed}}]],
+  homepage = "{{DESCRIPTION.homepage}}",
+  license = "{{DESCRIPTION.license}}"
+}
+
+dependencies = {
+{% for _, v in ipairs(DEPENDS) do %}
+  "{{v}}",
+{% end %}
+}
+build = {
+  type = 'builtin',
+  modules = {
+    -- Plain Lua files
+    {{string.format("[%-17s] = '%s/%s.lua'", "'"..type.."'", type, 'init')}},
+{% for file in lfs.dir(type) do %}
+{% if file ~= 'init.lua' and file:match('.lua$') then file = file:sub(1, -5) %}
+    {{string.format("[%-17s] = '%s/%s.lua'", "'"..type..'.'..file.."'", type, file)}},
+{% end %}
+{% end %}
+{% if not BUILD.pure_lua then
+  sources_count = 0
+  %}
+    -- C module
+    {{string.format("[%-17s] = ", "'"..type..".core'")}}{
+      sources = {
+{% for path in lub.Dir('src'):glob('%.c',0) do
+  sources_count = sources_count + 1 %}
+        '{{path}}',
+{% end %}
+{% for path in lub.Dir('src/bind'):glob '%.c' do
+  sources_count = sources_count + 1 %}
+        '{{path}}',
+{% end %}
+      },
+{% if BUILD.includes and #BUILD.includes > 0 then %}
+      incdirs   = {'{{ lub.join(BUILD.includes, "', '") }}'},
+{% end %}
+{% if BUILD.libraries and #BUILD.libraries > 0 then %}
+      libraries = {'{{ lub.join(BUILD.libraries, "', '") }}'},
+{% end %}
+    },
+{% end %}
+  },
+{% if lub.exist(type..'/assets') then %}
+  install = {
+    -- Assets needed by library.
+    lua = {
+{% for path in lub.Dir(type..'/assets'):glob() do %}
+      {{string.format("[%-32s] = '%s'", "'"..string.gsub(string.gsub(path, '%.', '_'), '/', '.').."'", path)}},
+{% end %}
+    },
+  },
+{% end %}
+{% if not BUILD.pure_lua and #BUILD.platspec > 0 then %}
+  platforms = {
+{% for _, plat in ipairs(BUILD.platspec) do 
+  idx = sources_count
+%}
+    {{plat}} = {
+      modules = {
+        ['{{type}}.core'] = {
+{% if lub.exist('src/'..plat) then %}
+          sources = {
+{% for path in lub.Dir('src/'..plat):glob '%.c' do 
+idx = idx + 1 %}
+            [{{idx}}] = '{{path}}',
+{% end %}
+{% for path in lub.Dir('src/'..plat):glob '%.m' do
+idx = idx + 1 %}
+            [{{idx}}] = '{{path}}',
+{% end %}
+          },
+{% end %}
+{% if BUILD.platlibs[plat] then %}
+          libraries = {'{{ lub.join(BUILD.platlibs[plat], "', '") }}'},
+{% end %}
+{% if BUILD.platdefs and BUILD.platdefs[plat] then %}
+          defines   = {'{{ lub.join(BUILD.platdefs[plat], "', '") }}'},
+{% end %}
+        },
+      },
+    },
+{% end %}
+  },
+{% end %}
+}
+
