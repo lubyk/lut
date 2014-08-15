@@ -1,3 +1,7 @@
+== 1.1.1 2014-08-15
+
+  * Using git tags to build lua rocks instead of github archives.
+
 == 1.1.0 2014-08-15
 
   * Added lut.Builder to help generate build files for CMake, luadist and luarocks.
