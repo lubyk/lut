@@ -12,6 +12,8 @@ description = {
     
     lub.Test: unit testing framework.
 
+    lub.Builder: helper to generate luarocks and CMake files.
+
     Read the documentation at http://doc.lubyk.org/lut.html. 
   ]],
   homepage = "http://doc.lubyk.org/lut.html",
