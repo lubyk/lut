@@ -1,4 +1,4 @@
-== 1.1.0
+== 1.1.0 2014-08-15
 
   * Added lut.Builder to help generate build files for CMake, luadist and luarocks.
   * Fixed tests running when verbose is on.
