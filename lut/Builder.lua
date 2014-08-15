@@ -173,6 +173,12 @@ end
 
 function lib:make()
   local config = self.config
+
+  -- Platform specific sources or link libraries
+  if config.BUILD.platlibs then
+    config.BUILD.platspec = lub.keys(config.BUILD.platlibs)
+  end
+  
   local tmp = lub.Template(lub.content(lub.path '|assets/builder/rockspec.in'))
   local path = config.type..'-'..config.VERSION..'-1.rockspec'
   lub.writeall(path, tmp:run(config))

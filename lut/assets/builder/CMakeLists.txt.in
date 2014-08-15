@@ -8,8 +8,8 @@
 --]]
 local lub = require 'lub'
 local lut = require 'lut'
-local platlibs  = BUILD.platlibs or {}
-local platdefs  = BUILD.platdefs or {}
+local platlibs  = BUILD.platlibs  or {}
+local platdefs  = BUILD.platdefs  or {}
 local libraries = BUILD.libraries or {}
 %}
 #
@@ -48,7 +48,7 @@ for _, k in ipairs(platdefs.macosx) do %}
 {% end; end %}
     set(LINK_FLAGS "-bundle -undefined dynamic_lookup -all_load")
 {% if platlibs.macosx then %}
-    set(LINK_LIBS "{{ lub.join(platlibs.macosx, ' ') }}")
+    set(LINK_LIBS "{{ lub.join(platlibs.macosx, '" "') }}")
 {% end %}
   else(APPLE)
     set(PLAT "linux")
@@ -58,7 +58,7 @@ for _, k in ipairs(platdefs.linux) do %}
 {% end; end %}
     set(LINK_FLAGS "-shared")
 {% if platlibs.linux then %}
-    set(LINK_LIBS "{{ lub.join(platlibs.linux, ' ') }}")
+    set(LINK_LIBS "{{ lub.join(platlibs.linux, '" "') }}")
 {% end %}
   endif(APPLE)
 else(UNIX)
@@ -69,7 +69,7 @@ for _, k in ipairs(platdefs.win32) do %}
     add_definitions(-D{{k}})
 {% end; end %}
 {% if platlibs.win32 then %}
-    set(LINK_LIBS "{{ lub.join(platlibs.win32, ' ') }}")
+    set(LINK_LIBS "{{ lub.join(platlibs.win32, '" "') }}")
 {% end %}
   else(WIN32)
     set(PLAT "unsupported")
@@ -87,7 +87,7 @@ endif(RELEASE)
 # --------------------------------------------------------------
 set(core "${MODULE_NAME}_core")
 
-include_directories({{ lub.join(includes, ' ') }})
+include_directories({{ lub.join(BUILD.includes, ' ') }})
 
 file(GLOB CORE_SOURCES src/*.c src/bind/dub/*.cpp src/bind/*.cpp src/*.cpp
   src/${PLAT}/*.cpp src/${PLAT}/*.mm)
@@ -113,7 +113,7 @@ install(TARGETS ${core}
 )
 
 {% end %}
-{% if cmake_extra then %}
+{% if BUILD.cmake_extra then %}
 {{cmake_extra}}
 {% end %}
 # --------------------------------------------------------------

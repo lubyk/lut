@@ -1,6 +1,9 @@
 {% 
 local lfs = require 'lfs'
 local lub = require 'lub'
+local platspec = BUILD.platspec or {}
+local platlibs = BUILD.platlibs or {}
+local platdefs = BUILD.platdefs or {}
 %}
 package = "{{type}}"
 version = "{{VERSION}}-1"
@@ -70,9 +73,9 @@ build = {
     },
   },
 {% end %}
-{% if not BUILD.pure_lua and #BUILD.platspec > 0 then %}
+{% if not BUILD.pure_lua and #platspec > 0 then %}
   platforms = {
-{% for _, plat in ipairs(BUILD.platspec) do 
+{% for _, plat in ipairs(platspec) do 
   idx = sources_count
 %}
     {{plat}} = {
@@ -90,11 +93,11 @@ idx = idx + 1 %}
 {% end %}
           },
 {% end %}
-{% if BUILD.platlibs[plat] then %}
-          libraries = {'{{ lub.join(BUILD.platlibs[plat], "', '") }}'},
+{% if platlibs[plat] then %}
+          libraries = {'{{ lub.join(platlibs[plat], "', '") }}'},
 {% end %}
-{% if BUILD.platdefs and BUILD.platdefs[plat] then %}
-          defines   = {'{{ lub.join(BUILD.platdefs[plat], "', '") }}'},
+{% if platdefs and platdefs[plat] then %}
+          defines   = {'{{ lub.join(platdefs[plat], "', '") }}'},
 {% end %}
         },
       },
