@@ -184,7 +184,7 @@ function lib:make()
   local config = self.config
   local build = config.BUILD
 
-  assert(build.github or (build.url and build.dir), 'Missing BUILD.github or BUILD.url and BUILD.dir.')
+  assert(build.github or (build.url and (build.dir or build.tag)), 'Missing BUILD.github or BUILD.url and BUILD.dir.')
 
   -- Platform specific sources or link libraries
   if build.platlibs and not build.platkeys then

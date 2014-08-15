@@ -10,10 +10,14 @@ version = "{{VERSION}}-1"
 source = {
 {% if BUILD.url then %}
   url = '{{BUILD.url}}',
-  dir = '{{BUILD.dir}}',
+{% if BUILD.tag then %}
+  tag = '{{BUILD.tag}}',
 {% else %}
-  url = 'https://github.com/{{BUILD.github}}/{{type}}/archive/REL-{{VERSION}}.tar.gz',
-  dir = '{{type}}-REL-{{VERSION}}',
+  dir = '{{BUILD.dir}}',
+{% end %}
+{% else %}
+  url = 'git://github.com/{{BUILD.github}}/{{type}}',
+  tag = 'REL-{{VERSION}}',
 {% end %}
 }
 description = {
