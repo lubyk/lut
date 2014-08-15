@@ -100,6 +100,9 @@
   + `dir`      : name of extracted source directory. Only needed with `url`.
   + `includes` : list of header include paths (relative to project root).
   + `libraries`: libraries common to all platforms.
+  + `sources`  : optional list of C/C++ files to include in build. Can contain
+                 `*` (such as `src/vendor/*.cpp`) to glob. Can also contain `${PLAT}`
+                 for platform specific directories (ex. `src/${PLAT}/*.cpp`).
   + `platlibs` : platform specific library dependencies.
   + `platdefs` : platform specific defines.
   + `pure_lua` : set to `true` if the library does not contain any C/C++ code.
@@ -160,7 +163,8 @@
 --]]------------------------------------------------------
 local lub     = require 'lub'
 local lib     = lub.class 'lut.Builder'
-local private = {}
+local expandPaths
+local PLATFORMS = {'macosx', 'linux', 'win32'}
 
 -- Create a new builder object from a configuration table (see above for config
 -- format and options).
@@ -173,11 +177,50 @@ end
 
 function lib:make()
   local config = self.config
+  local build = config.BUILD
 
   -- Platform specific sources or link libraries
-  if config.BUILD.platlibs then
-    config.BUILD.platspec = lub.keys(config.BUILD.platlibs)
+  if build.platlibs and not build.platkeys then
+    build.platkeys = lub.keys(build.platlibs)
   end
+
+  build.sources = build.sources or {
+    'src/*.c',
+    'src/*.cpp',
+    'src/bind/dub/*.cpp',
+    'src/bind/*.cpp',
+    'src/${PLAT}/*.cpp',
+    'src/${PLAT}/*.mm',
+  }
+
+  -- rockspec sources
+  local rsources = {}
+  build.rsources = rsources
+  -- rockspec plat specific sources
+  local rpsources = {}
+  build.rpsources = rpsources
+
+  local list = {}
+  for _, src in ipairs(build.sources) do
+    if src:match('%${PLAT}') then
+      for _, plat in ipairs(PLATFORMS) do
+        local plist = rpsources[plat]
+        if not plist then
+          plist = {}
+          rpsources[plat] = plist
+        end
+        expandPaths((src:gsub('%${.+}', plat)), plist)
+      end
+    else
+      expandPaths(src, rsources)
+    end
+  end
+
+  table.sort(rsources)
+  for _, list in pairs(rpsources) do
+    table.sort(list)
+  end
+
   
   local tmp = lub.Template(lub.content(lub.path '|assets/builder/rockspec.in'))
   local path = config.type..'-'..config.VERSION..'-1.rockspec'
@@ -194,6 +237,20 @@ function lib:make()
   path = 'CMakeLists.txt'
   lub.writeall(path, tmp:run(config))
   print("Generated '"..path.."'")
+end
+
+function expandPaths(src, list)
+  local base, file = lub.dir(src)
+  if lub.exist(base) then
+    if file:match('%*') then
+      local pat = file:gsub('%*', '%%')
+      for path in lub.Dir(base):glob(pat, 0) do
+        table.insert(list, path)
+      end
+    else
+      table.insert(list, path)
+    end
+  end
 end
 
 return lib

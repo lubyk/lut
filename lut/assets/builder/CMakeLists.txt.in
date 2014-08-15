@@ -11,6 +11,7 @@ local lut = require 'lut'
 local platlibs  = BUILD.platlibs  or {}
 local platdefs  = BUILD.platdefs  or {}
 local libraries = BUILD.libraries or {}
+local sources   = BUILD.sources   or {}
 %}
 #
 # MACHINE GENERATED FILE. DO NOT EDIT.
@@ -89,8 +90,7 @@ set(core "${MODULE_NAME}_core")
 
 include_directories({{ lub.join(BUILD.includes, ' ') }})
 
-file(GLOB CORE_SOURCES src/*.c src/bind/dub/*.cpp src/bind/*.cpp src/*.cpp
-  src/${PLAT}/*.cpp src/${PLAT}/*.mm)
+file(GLOB CORE_SOURCES {{ lub.join(BUILD.sources, ' ') }})
 
 add_library(${core} MODULE ${CORE_SOURCES})
 if(LINK_LIBS)
