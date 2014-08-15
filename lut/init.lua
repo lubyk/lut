@@ -33,12 +33,12 @@ lib.DEPENDS = { -- doc
 lib.DESCRIPTION = {
   summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
   detailed = [[
-    lub.Doc: a powerful documentation generator for Lua code with support for
+    lut.Doc: a powerful documentation generator for Lua code with support for
     litterate programming, cross-reference linking, images, latex math, etc.
     
-    lub.Test: unit testing framework.
+    lut.Test: unit testing framework.
 
-    lub.Builder: helper to generate luarocks and CMake files.
+    lut.Builder: helper to generate luarocks and CMake files.
 
     Read the documentation at http://doc.lubyk.org/lut.html. 
   ]],
