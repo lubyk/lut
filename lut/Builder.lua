@@ -245,10 +245,16 @@ function expandPaths(src, list)
     if file:match('%*') then
       local pat = file:gsub('%*', '%%')
       for path in lub.Dir(base):glob(pat, 0) do
-        table.insert(list, path)
+        if not list[path] then
+          list[path] = true
+          table.insert(list, path)
+        end
       end
     else
-      table.insert(list, path)
+      if not list[path] then
+        list[path] = true
+        table.insert(list, path)
+      end
     end
   end
 end
