@@ -1,3 +1,9 @@
+== 1.2.0 2014-08-19
+
+  * Added lut.Project to ease initial project files setup.
+  * lut.Doc filter supports multiple values.
+  * Fixed lut.Builder when using git tag.
+
 == 1.1.1 2014-08-15
 
   * Using git tags to build lua rocks instead of github archives.

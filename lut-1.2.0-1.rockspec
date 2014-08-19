@@ -3,6 +3,7 @@ version = "1.2.0-1"
 source = {
   url = 'git://github.com/lubyk/lut',
   tag = 'REL-1.2.0',
+  dir = 'lut',
 }
 description = {
   summary = "Utility module for lubyk. Contains a documentation generator and testing facilities.",
