@@ -18,6 +18,7 @@ source = {
 {% else %}
   url = 'git://github.com/{{BUILD.github}}/{{type}}',
   tag = 'REL-{{VERSION}}',
+  dir = '{{type}}',
 {% end %}
 }
 description = {

@@ -19,7 +19,7 @@ local lub = require 'lub'
 local lib = lub.Autoload 'lut'
 
 -- Current version of 'lut' respecting [semantic versioning](http://semver.org).
-lib.VERSION = '1.1.1'
+lib.VERSION = '1.2.0'
 
 -- Library dependencies
 lib.DEPENDS = { -- doc
