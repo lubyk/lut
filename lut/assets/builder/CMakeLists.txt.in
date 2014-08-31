@@ -93,7 +93,7 @@ endif(RELEASE)
 # --------------------------------------------------------------
 set(core "${MODULE_NAME}_core")
 
-include_directories({{ lub.join(BUILD.includes, ' ') }})
+include_directories(/usr/local/include {{ lub.join(BUILD.includes, ' ') }})
 
 file(GLOB CORE_SOURCES {{ lub.join(BUILD.sources, ' ') }})
 
