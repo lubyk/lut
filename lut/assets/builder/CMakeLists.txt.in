@@ -28,7 +28,12 @@ cmake_minimum_required(VERSION 2.8)
 set(MODULE_NAME {{type}})
 
 # Where to install files
-set(INSTALL_PATH "${CMAKE_BINARY_DIR}/lib" CACHE STRING "Install directory path")
+if(LUA_INSTALL_DIR)
+  set(INSTALL_PATH ${LUA_INSTALL_DIR})
+else(LUA_INSTALL_DIR)
+  set(INSTALL_PATH "${CMAKE_BINARY_DIR}/lib" CACHE STRING "Install directory path")
+endif(LUA_INSTALL_DIR)
+message("INSTALL '{{type}}' TO '${INSTALL_PATH}'")
 
 # --------------------------------------------------------------
 #  module
@@ -103,6 +108,10 @@ set_target_properties(${core}
   SUFFIX ".so"
 )  
 
+{% if BUILD.cmake_extra then %}
+{{BUILD.cmake_extra}}
+{% end %}
+
 add_dependencies(${MODULE_NAME} ${core})
 
 # --------------------------------------------------------------
@@ -112,9 +121,6 @@ install(TARGETS ${core}
   DESTINATION ${INSTALL_PATH}/${MODULE_NAME}
 )
 
-{% end %}
-{% if BUILD.cmake_extra then %}
-{{cmake_extra}}
 {% end %}
 # --------------------------------------------------------------
 #  install                                     
