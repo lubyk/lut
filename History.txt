@@ -1,3 +1,7 @@
+== 1.2.1
+
+  * Better error reporting in case of lut.Doc path error.
+
 == 1.2.0 2014-08-19
 
   * Added lut.Project to ease initial project files setup.

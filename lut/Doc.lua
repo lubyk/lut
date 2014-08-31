@@ -538,6 +538,8 @@ function private.parseSources(tree, sources)
         for path in lub.Dir(mpath):glob '%.lua' do
           private.insertInTree(tree, path, mpath, prepend)
         end
+      elseif not lub.exist(mpath) then
+        error("Path '"..mpath.."' does not exist.")
       else
         private.insertInTree(tree, mpath, lub.dir(mpath), prepend)
       end
@@ -574,6 +576,8 @@ function private.insertInTree(tree, fullpath, base, prepend)
 
     if is_init then
       curr.__file = fullpath
+    elseif not part then
+      error("Bad file name '"..path.."'.")
     else
       if not curr[part] then
         local fullname
