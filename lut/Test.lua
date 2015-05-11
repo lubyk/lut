@@ -506,7 +506,7 @@ function private:runSuite()
   -- run all tests in the current file
   local skip = current.user_suite and lib.file_count > 1
   for i,e in pairs(current.tests) do
-    local name, func = unpack(e)
+    local name, func = e[1], e[2]
     -- Testing scratchpad (used for GC protection).
     test_var = {}
     test_var._name  = name
@@ -571,7 +571,7 @@ function private:reportSuite()
   lib.total_asrt = lib.total_asrt + self._info.assert_count
   if self._info.fail_count > 0 then
     for _, e in ipairs(self._info.errors) do
-      local i, name, err = unpack(e)
+      local i, name, err = e[1], e[2], e[3]
       lib.total_fail = lib.total_fail + 1
       local hname = string.gsub(name, '([A-Z])', function(x) return ' '..string.lower(x) end)
       printf('  %i. Should %s\n     %s\n', i, hname, string.gsub(err, '\n', '\n     '))

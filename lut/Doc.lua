@@ -328,13 +328,14 @@ local CODE = '§§'
 local ALLOWED_OPTIONS = {lit = true, loose = true}
 local DEFAULT_HEADER = [[ ]]
 local DEFAULT_FOOTER = [[ Documentation generated on {{os.date '%Y-%m-%d'}} with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
-local gsub  = string.gsub
-local match = string.match
+local        gsub,        match,       unpack,       pack = 
+      string.gsub, string.match, table.unpack, table.pack
 
 -- nodoc
 -- list of files to copy in generated documentation.
 lib.ASSETS =  {
   'css/bootstrap.min.css',
+  'css/bootstrap-responsive.min.css',
   'css/docs.css',
   'img/glyphicons-halflings-white.png', 
   'img/glyphicons-halflings.png',
@@ -529,6 +530,7 @@ end
 
 function private.parseSources(tree, sources)
   local prepend = sources.prepend
+  local ignore  = sources.ignore
   for _, mpath in ipairs(sources) do
     if type(mpath) == 'table' then
       private.parseSources(tree, mpath)
@@ -536,7 +538,11 @@ function private.parseSources(tree, sources)
       local mpath = lub.absolutizePath(mpath)
       if lub.fileType(mpath) == 'directory' then
         for path in lub.Dir(mpath):glob '%.lua' do
-          private.insertInTree(tree, path, mpath, prepend)
+          if ignore and path:match(ignore) then
+            -- ignore
+          else
+            private.insertInTree(tree, path, mpath, prepend)
+          end
         end
       elseif not lub.exist(mpath) then
         error("Path '"..mpath.."' does not exist.")
@@ -722,7 +728,7 @@ function private:doParse(iterator)
       for i=1,#state do
         local matcher = state[i]
         if not matcher.on_enter or entering then
-          local m = {match(line, matcher.match)}
+          local m = pack(match(line, matcher.match))
           if m[1] then
             local move = matcher.move
             if matcher.output then

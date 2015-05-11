@@ -19,12 +19,12 @@ local lub = require 'lub'
 local lib = lub.Autoload 'lut'
 
 -- Current version of 'lut' respecting [semantic versioning](http://semver.org).
-lib.VERSION = '1.2.0'
+lib.VERSION = '1.2.1'
 
 -- Library dependencies
 lib.DEPENDS = { -- doc
-  -- Compatible with Lua 5.1, 5.2 and LuaJIT
-  'lua >= 5.1, < 5.3',
+  -- Compatible with Lua 5.1 to 5.3 and LuaJIT
+  'lua >= 5.1, < 5.4',
   -- Uses [Lubyk base library](http://doc.lubyk.org/lub.html)
   'lub >= 1.0.3, < 2',
 }

@@ -27,13 +27,23 @@ cmake_minimum_required(VERSION 2.8)
 # --------------------------------------------------------------
 set(MODULE_NAME {{type}})
 
-# Where to install files
+# Where to install Lua files
 if(LUA_INSTALL_DIR)
   set(INSTALL_PATH ${LUA_INSTALL_DIR})
 else(LUA_INSTALL_DIR)
   set(INSTALL_PATH "${CMAKE_BINARY_DIR}/lib" CACHE STRING "Install directory path")
 endif(LUA_INSTALL_DIR)
-message("INSTALL '{{type}}' TO '${INSTALL_PATH}'")
+message("INSTALL Lua    '{{type}}' TO '${INSTALL_PATH}'")
+
+{% if not BUILD.pure_lua then %}
+# Where to install binary modules
+if(LUA_INSTALL_BINDIR)
+  set(INSTALL_BINPATH ${LUA_INSTALL_BINDIR})
+else(LUA_INSTALL_BINDIR)
+  set(INSTALL_BINPATH "${CMAKE_BINARY_DIR}/lib" CACHE STRING "Install directory path")
+endif(LUA_INSTALL_BINDIR)
+message("INSTALL binary '{{type}}' TO '${INSTALL_BINPATH}'")
+{% end %}
 
 # --------------------------------------------------------------
 #  module
@@ -118,7 +128,7 @@ add_dependencies(${MODULE_NAME} ${core})
 #  install                                     
 # --------------------------------------------------------------
 install(TARGETS ${core}
-  DESTINATION ${INSTALL_PATH}/${MODULE_NAME}
+  DESTINATION ${INSTALL_BINPATH}/${MODULE_NAME}
 )
 
 {% end %}
