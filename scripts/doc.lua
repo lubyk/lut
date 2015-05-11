@@ -2,7 +2,7 @@
 -- Generate documentation for this project into 'html' folder
 --
 -- Use local version to build docs.
-package.path = './?.lua;'..package.path
+package.path = './?/init.lua;'..package.path
 local lut = require 'lut'
 lut.Doc.make {
   sources = {
