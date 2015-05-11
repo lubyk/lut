@@ -1601,8 +1601,16 @@ function private.copyFiles(list, target)
   end
   for _, mpath in ipairs(list) do
     local len = string.len(mpath)
-    for _, filt in ipairs(filter) do
-      for src in lub.Dir(mpath):glob(filt) do
+    if filter then
+      for _, filt in ipairs(filter) do
+        for src in lub.Dir(mpath):glob(filt) do
+          local path = string.sub(src, len + 2)
+          local trg  = target .. '/' .. path
+          lub.copy(src, trg)
+        end
+      end
+    else
+      for src in lub.Dir(mpath):list() do
         local path = string.sub(src, len + 2)
         local trg  = target .. '/' .. path
         lub.copy(src, trg)

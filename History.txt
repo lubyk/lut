@@ -1,3 +1,7 @@
+== 1.2.2
+
+  * Fixed bug when Doc copy setting is used without a filter.
+
 == 1.2.1 2015-05-11
 
   * Better error reporting in case of lut.Doc path error.

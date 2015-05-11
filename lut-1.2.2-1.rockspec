@@ -1,8 +1,8 @@
 package = "lut"
-version = "1.2.1-1"
+version = "1.2.2-1"
 source = {
   url = 'git://github.com/lubyk/lut',
-  tag = 'REL-1.2.1',
+  tag = 'REL-1.2.2',
   dir = 'lut',
 }
 description = {
