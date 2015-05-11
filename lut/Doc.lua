@@ -328,8 +328,11 @@ local CODE = '§§'
 local ALLOWED_OPTIONS = {lit = true, loose = true}
 local DEFAULT_HEADER = [[ ]]
 local DEFAULT_FOOTER = [[ Documentation generated on {{os.date '%Y-%m-%d'}} with <a href='http://doc.lubyk.org/lut.Doc.html'>lut.Doc</a> ]]
-local        gsub,        match,       unpack,       pack = 
-      string.gsub, string.match, table.unpack, table.pack
+local        gsub,        match,                 unpack,               pack = 
+      string.gsub, string.match, unpack or table.unpack, pack or table.pack
+
+-- Luajit compatibility when built without 5.2 compat.
+if not pack then function pack(...) return {...} end end
 
 -- nodoc
 -- list of files to copy in generated documentation.
