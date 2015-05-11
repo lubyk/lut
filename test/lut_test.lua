@@ -3,7 +3,7 @@
   lut test
 
 --]]------------------------------------------------------
-package.path = './?/init.lua;'..package.path
+package.path = './?.lua;'..package.path
 local lut    = require 'lut'
 local should = lut.Test('lut', { coverage = false })
 
