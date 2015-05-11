@@ -1,10 +1,12 @@
 --
 -- Generate documentation for this project into 'html' folder
 --
+-- Use local version to build docs.
+package.path = './?.lua;'..package.path
 local lut = require 'lut'
 lut.Doc.make {
   sources = {
-    'lut',
+    {'lut', ignore='assets'},
   },
   target = 'html',
   format = 'html',

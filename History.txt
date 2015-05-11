@@ -3,6 +3,7 @@
   * Better error reporting in case of lut.Doc path error.
   * Added support for 'cmake' build type.
   * Added /usr/local/include as default include path for lua.h.
+  * Fixed load path during testing.
 
 == 1.2.0 2014-08-19
 
