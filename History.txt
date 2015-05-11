@@ -1,4 +1,4 @@
-== 1.2.1
+== 1.2.1 2015-05-11
 
   * Better error reporting in case of lut.Doc path error.
   * Added support for 'cmake' build type.
